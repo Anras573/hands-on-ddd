@@ -17,47 +17,27 @@ public class ClassifiedAd : Entity
     public ClassifiedAd(ClassifiedAdId id, UserId ownerId)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
-        Apply(new Events.ClassifiedAdCreated
-        {
-            Id = id,
-            OwnerId = ownerId
-        });
+        Apply(new Events.ClassifiedAdCreated(Id: id, OwnerId: ownerId));
     }
 
     public void SetTitle(ClassifiedAdTitle title)
     {
-        Apply(new Events.ClassifiedAdTitleChanged
-        (
-            id: Id,
-            title: title
-        ));
+        Apply(new Events.ClassifiedAdTitleChanged(Id: Id, Title: title));
     }
 
     public void UpdateText(ClassifiedAdText text)
     {
-        Apply(new Events.ClassifiedAdTextUpdated
-        (
-            id: Id, 
-            text: text
-        ));
+        Apply(new Events.ClassifiedAdTextUpdated(Id: Id, Text: text));
     }
 
     public void UpdatePrice(Price price)
     {
-        Apply(new Events.ClassifiedAdPriceUpdated
-        (
-            currencyCode: price.Currency.CurrencyCode ?? string.Empty,
-            id: Id,
-            price: price.Amount
-        ));
+        Apply(new Events.ClassifiedAdPriceUpdated(CurrencyCode: price.Currency.CurrencyCode ?? string.Empty, Id: Id, Price: price.Amount));
     }
 
     public void RequestToPublish()
     {
-        Apply(new Events.ClassifiedAdSentForReview
-        {
-            Id = Id
-        });
+        Apply(new Events.ClassifiedAdSentForReview(Id: Id));
     }
 
     protected override void When(object @event)
