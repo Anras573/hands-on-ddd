@@ -47,6 +47,23 @@ public record ClassifiedAdText(string Value)
 }
 ```
 
+I also converted all of the events into records.
+
+```csharp
+public static class Events
+{
+    public record ClassifiedAdCreated(Guid Id, Guid OwnerId);
+
+    public record ClassifiedAdTitleChanged(Guid Id, string Title);
+
+    public record ClassifiedAdTextUpdated(Guid Id, string Text);
+    
+    public record ClassifiedAdPriceUpdated(Guid Id, decimal Price, string CurrencyCode);
+
+    public record ClassifiedAdSentForReview(Guid Id);
+}
+```
+
 ### Nullables
 
 To handle the possibility of null values for properties such as `Title`, `Text`, `Price`, and `ApprovedBy` I marked them as nullable. This allows for more precise modeling of the domain by indicating that these properties can have a value or be null. Although I may consider introducing the Maybe Monad in future iterations, nullable types currently serve the purpose effectively.
