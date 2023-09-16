@@ -5,13 +5,13 @@ public class ClassifiedAdTitleTest
     [Fact]
     public void Reject_titles_longer_than_100_characters_in_length()
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => ClassifiedAdTitle.FromString(new string('a', 101)));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new ClassifiedAdTitle(new string('a', 101)));
     }
     
     [Fact]
     public void Allow_titles_100_characters_or_less_in_length()
     {
-        var title = ClassifiedAdTitle.FromString(new string('a', 100));
+        var title = new ClassifiedAdTitle(new string('a', 100));
         var expected = new string('a', 100);
         Assert.Equal(expected, title);
     }

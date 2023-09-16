@@ -4,16 +4,10 @@ namespace Marketplace.Domain;
 
 public partial record ClassifiedAdTitle
 {
-    private readonly string _value;
+    public string Title { get; }
 
     [GeneratedRegex("<.*?>")]
     private static partial Regex UnsupportedHtmlTagsRegex();
-    
-    public static ClassifiedAdTitle FromString(string title)
-    {
-        CheckValidity(title);
-        return new ClassifiedAdTitle(title);
-    }
 
     public static ClassifiedAdTitle FromHtml(string htmlTitle)
     {
@@ -24,22 +18,17 @@ public partial record ClassifiedAdTitle
             .Replace("</b>", "**");
 
         var value = UnsupportedHtmlTagsRegex().Replace(supportedTagsReplaced, string.Empty);
-
-        CheckValidity(value);
-
+        
         return new ClassifiedAdTitle(value);
     }
-
-    internal ClassifiedAdTitle(string value)
+    
+    public ClassifiedAdTitle(string title)
     {
-        _value = value;
+        if (title.Length > 100)
+                 throw new ArgumentOutOfRangeException(nameof(title), "Title cannot be longer than 100 characters");
+        
+        Title = title;
     }
 
-    private static void CheckValidity(string value)
-    {
-        if (value.Length > 100)
-            throw new ArgumentOutOfRangeException(nameof(value), "Title cannot be longer than 100 characters");
-    }
-
-    public static implicit operator string(ClassifiedAdTitle self) => self._value;
+    public static implicit operator string(ClassifiedAdTitle self) => self.Title;
 }

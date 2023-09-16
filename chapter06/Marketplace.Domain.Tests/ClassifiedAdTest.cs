@@ -10,7 +10,7 @@ public class ClassifiedAdTest
     {
         var ad = GetClassifiedAd();
 
-        ad.SetTitle(ClassifiedAdTitle.FromString("Test ad"));
+        ad.SetTitle(new ClassifiedAdTitle("Test ad"));
         ad.UpdateText(ClassifiedAdText.FromString("Please buy my stuff"));
         ad.UpdatePrice(Price.FromDecimal(100.10m, "EUR", new FakeCurrencyLookup()));
 
@@ -35,7 +35,7 @@ public class ClassifiedAdTest
     {
         var ad = GetClassifiedAd();
 
-        ad.SetTitle(ClassifiedAdTitle.FromString("Test ad"));
+        ad.SetTitle(new ClassifiedAdTitle("Test ad"));
         ad.UpdatePrice(Price.FromDecimal(100.10m, "EUR", new FakeCurrencyLookup()));
 
         Assert.Throws<InvalidEntityStateException>(() => ad.RequestToPublish());
@@ -46,7 +46,7 @@ public class ClassifiedAdTest
     {
         var ad = GetClassifiedAd();
 
-        ad.SetTitle(ClassifiedAdTitle.FromString("Test ad"));
+        ad.SetTitle(new ClassifiedAdTitle("Test ad"));
         ad.UpdateText(ClassifiedAdText.FromString("Please buy my stuff"));
 
         Assert.Throws<InvalidEntityStateException>(() => ad.RequestToPublish());
@@ -57,7 +57,7 @@ public class ClassifiedAdTest
     {
         var ad = GetClassifiedAd();
 
-        ad.SetTitle(ClassifiedAdTitle.FromString("Test ad"));
+        ad.SetTitle(new ClassifiedAdTitle("Test ad"));
         ad.UpdateText(ClassifiedAdText.FromString("Please buy my stuff"));
         ad.UpdatePrice(Price.FromDecimal(0, "EUR", new FakeCurrencyLookup()));
 

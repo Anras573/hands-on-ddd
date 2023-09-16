@@ -13,8 +13,7 @@ public record Price : Money
             throw new ArgumentException("Price cannot be negative", nameof(amount));
     }
 
-    internal Price(decimal amount, string currency) : base(amount, new CurrencyDetails { CurrencyCode = currency })
-    {
-
-    }
+    internal Price(decimal amount, string currency) : base(amount, new CurrencyDetails { CurrencyCode = currency }) { }
+    
+    public Price(decimal amount, CurrencyDetails currency) : base(amount, currency) { }
 }
