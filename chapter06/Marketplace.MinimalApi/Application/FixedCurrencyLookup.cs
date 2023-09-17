@@ -1,6 +1,6 @@
 ﻿using Marketplace.Domain;
 
-namespace Marketplace;
+namespace Marketplace.MinimalApi.Application;
 
 public class FixedCurrencyLookup : ICurrencyLookup
 {
