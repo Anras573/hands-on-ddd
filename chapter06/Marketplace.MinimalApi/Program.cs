@@ -38,3 +38,5 @@ app.MapGet("/", () => "Hello World!")
 ClassifiedAdsCommandsEndpoints.Map(app);
 
 app.Run();
+
+public partial class Program { } // So I can reference it from tests.

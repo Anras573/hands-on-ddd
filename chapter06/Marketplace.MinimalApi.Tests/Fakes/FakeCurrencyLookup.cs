@@ -1,4 +1,6 @@
-﻿namespace Marketplace.Domain.Tests.Fakes;
+﻿using Marketplace.Domain;
+
+namespace Marketplace.MinimalApi.Tests.Fakes;
 
 public class FakeCurrencyLookup : ICurrencyLookup
 {
