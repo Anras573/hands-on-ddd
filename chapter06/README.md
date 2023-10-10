@@ -87,7 +87,7 @@ public static class ClassifiedAds
 
 ### Docker Compose
 
-In his docker compose file, [Alexey](https://github.com/alexeyzimarev) is using the `latest` tag for the RavenDB image. I have changed it to use the `5.4` tag, which is the latest stable version at the time of writing.
+In his docker compose file, [Alexey](https://github.com/alexeyzimarev) is using the `latest` tag for the RavenDB image. I have changed it to use the `6.0` tag, which is the latest stable version at the time of writing.
 I think you should be very specific about the version of the image you are using, especially in Production.
 By aligning development and production, you can faster discover issues that might arise from using different versions.
 
@@ -97,7 +97,7 @@ version: '3.5'
 services:
   ravendb:
     container_name: marketplace-ravendb
-    image: ravendb/ravendb:5.4
+    image: ravendb/ravendb:6.0-ubuntu-latest
     ports:
       - "8080:8080"
     environment:
@@ -110,7 +110,10 @@ services:
 
 In this chapter he skips writing any test entirely, and I think the sooner you implement tests for your API, the easier it is to write them.
 
-So I have decided to write tests for the endpoints, and the application service.
+So I have decided to write tests for the endpoints, application, and infrastructure layer.
+
+This was a great opportunity to try out the new `Microsoft.AspNetCore.Mvc.Testing` package, which allows you to test your API using the `WebApplicationFactory<TEntryPoint>` class.
+It's also a great opportunity to use TestContainers, which allows you to spin up a Docker container for your tests. - I use it for RavenDB in this project.
 
 ## Thoughts
 
@@ -125,4 +128,4 @@ I would have like a bit more explanation on the setup, and why RavenDB was chose
 ### Command Handler Pattern
 
 He talks a bit about the Command Handler pattern, and that he has decided against it for this project.
-I understand his reasoning, but I think using the MediatR library would have eased the implementation of the patter, and the library lends it self very well to event sourcing and CQRS in general.
+I understand his reasoning, but I think using the MediatR library would have eased the implementation of the pattern, and the library lends it self very well to event sourcing and CQRS in general.

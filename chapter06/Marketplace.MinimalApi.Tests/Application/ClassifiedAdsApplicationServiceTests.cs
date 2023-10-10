@@ -7,10 +7,10 @@ using Marketplace.MinimalApi.Tests.TestContainers;
 
 namespace Marketplace.MinimalApi.Tests.Application;
 
+[Trait("Type", "Integration")]
 public class ClassifiedAdsApplicationServiceTests
 {
     [Fact]
-    [Trait("Type", "Integration")]
     public async Task GivenCreateCommand_WhenHandle_ThenClassifiedAdIsCreated()
     {
         // Arrange
@@ -35,7 +35,6 @@ public class ClassifiedAdsApplicationServiceTests
     }
 
     [Fact]
-    [Trait("Type", "Integration")]
     public async Task WhenClassifiedAdExists_GivenCreateCommand_WhenHandle_ThenInvalidOperationExceptionIsThrown()
     {
         // Arrange

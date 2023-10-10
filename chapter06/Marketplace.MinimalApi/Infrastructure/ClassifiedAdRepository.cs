@@ -3,7 +3,7 @@ using Raven.Client.Documents.Session;
 
 namespace Marketplace.MinimalApi.Infrastructure;
 
-public class ClassifiedAdRepository : IClassifiedAdRepository, IDisposable
+public class ClassifiedAdRepository : IClassifiedAdRepository
 {
     private readonly IAsyncDocumentSession _session;
 
@@ -18,8 +18,6 @@ public class ClassifiedAdRepository : IClassifiedAdRepository, IDisposable
         await _session.StoreAsync(entity, EntityId(entity.Id));
         await _session.SaveChangesAsync();
     }
-
-    public void Dispose() => _session.Dispose();
     
     private static string EntityId(ClassifiedAdId id) => $"ClassifiedAd/{id}";
 }

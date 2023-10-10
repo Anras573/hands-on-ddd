@@ -12,8 +12,9 @@ public class RavenDBTestContainer
     public static async Task<IAsyncDocumentSession> CreateDocumentSessionAsync()
     {
         var container = new ContainerBuilder()
-            .WithImage("ravendb/ravendb:5.4-ubuntu-latest")
+            .WithImage("ravendb/ravendb:6.0-ubuntu-latest")
             .WithPortBinding(8080, true)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilMessageIsLogged("Server started"))
             .Build();
 
         await container.StartAsync();
@@ -26,7 +27,7 @@ public class RavenDBTestContainer
     
     private static DocumentStore SetupDocumentStore(string url)
     {
-        const string databaseName = "Marketplace_Chapter6";
+        const string databaseName = "Marketplace_Chapter6_Test";
 
         var store = new DocumentStore
         {

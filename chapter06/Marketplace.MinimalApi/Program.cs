@@ -6,7 +6,12 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddApplication();
-builder.AddInfrastructure();
+
+builder.AddInfrastructure(() => new InfrastructureOptions
+{
+    CreateDatabase = builder.Environment.IsDevelopment(),
+    DatabaseName = "Marketplace_Chapter6"
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

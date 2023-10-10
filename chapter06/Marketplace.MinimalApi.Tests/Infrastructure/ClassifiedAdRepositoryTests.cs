@@ -4,10 +4,10 @@ using Marketplace.MinimalApi.Tests.TestContainers;
 
 namespace Marketplace.MinimalApi.Tests.Infrastructure;
 
+[Trait("Type", "Integration")]
 public class ClassifiedAdRepositoryTests
 {
     [Fact]
-    [Trait("Type", "Integration")]
     public async Task GivenClassifiedAdDoesNotExist_WhenExists_ThenReturnsFalse()
     {
         // Arrange
@@ -22,7 +22,6 @@ public class ClassifiedAdRepositoryTests
     }
     
     [Fact]
-    [Trait("Type", "Integration")]
     public async Task GivenClassifiedAdExists_WhenExists_ThenReturnsTrue()
     {
         // Arrange
@@ -39,7 +38,6 @@ public class ClassifiedAdRepositoryTests
     }
     
     [Fact]
-    [Trait("Type", "Integration")]
     public async Task GivenClassifiedAd_WhenLoadingClassifiedAd_ThenClassifiedAdIsLoaded()
     {
         // Arrange

@@ -5,24 +5,29 @@ using Raven.Client.ServerWide.Operations;
 
 namespace Marketplace.MinimalApi.Infrastructure;
 
+public sealed class InfrastructureOptions
+{
+    public bool CreateDatabase { get; set; }
+    public string DatabaseName { get; set; }
+}
+
 public static class DependencyInjectionInfrastructure
 {
-    public static void AddInfrastructure(this WebApplicationBuilder builder)
+    public static void AddInfrastructure(this WebApplicationBuilder builder, Func<InfrastructureOptions> optionsFactory)
     {
-        var store = SetupDocumentStore();
+        var options = optionsFactory();
+        var store = SetupDocumentStore(options);
 
-        builder.Services.AddTransient(_ => store.OpenAsyncSession());
-        builder.Services.AddScoped<IClassifiedAdRepository, ClassifiedAdRepository>();
+        builder.Services.AddSingleton(_ => store.OpenAsyncSession());
+        builder.Services.AddSingleton<IClassifiedAdRepository, ClassifiedAdRepository>();
     }
 
-    private static DocumentStore SetupDocumentStore()
+    private static DocumentStore SetupDocumentStore(InfrastructureOptions options)
     {
-        const string databaseName = "Marketplace_Chapter6";
-
         var store = new DocumentStore
         {
             Urls = new[] { "http://localhost:8080" },
-            Database = databaseName,
+            Database = options.DatabaseName,
             Conventions =
             {
                 FindIdentityProperty = m => m.Name == "_databaseId"
@@ -33,11 +38,13 @@ public static class DependencyInjectionInfrastructure
             Task.FromResult($"ClassifiedAd/{entity.Id}"));
         store.Initialize();
 
-        if (!store.Maintenance.Server.Send(new GetDatabaseNamesOperation(0, 10)).Contains(databaseName))
+        if (!options.CreateDatabase) return store;
+        
+        if (!store.Maintenance.Server.Send(new GetDatabaseNamesOperation(0, 10)).Contains(options.DatabaseName))
         {
-            store.Maintenance.Server.Send(new CreateDatabaseOperation(new DatabaseRecord(databaseName)));
+            store.Maintenance.Server.Send(new CreateDatabaseOperation(new DatabaseRecord(options.DatabaseName)));
         }
-
+        
         return store;
     }
 }

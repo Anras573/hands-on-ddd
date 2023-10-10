@@ -8,16 +8,24 @@ namespace Marketplace.MinimalApi.Tests.Factories;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
+    private readonly IAsyncDocumentSession _documentSession;
+
+    public CustomWebApplicationFactory(IAsyncDocumentSession documentSession)
+    {
+        _documentSession = documentSession;
+    }
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseEnvironment("Test");
+        
         builder.ConfigureServices(services =>
         {
             var storeDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IAsyncDocumentSession));
             
             if (storeDescriptor is not null)
                 services.Remove(storeDescriptor);
-            
-            services.AddTransient(_ => RavenDBTestContainer.CreateDocumentSessionAsync().GetAwaiter().GetResult());
+
+            services.AddSingleton<IAsyncDocumentSession>(_ => _documentSession);
         });
     }
 }
