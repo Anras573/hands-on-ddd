@@ -11,4 +11,6 @@ public static class Events
     public record ClassifiedAdPriceUpdated(Guid Id, decimal Price, string CurrencyCode);
 
     public record ClassifiedAdSentForReview(Guid Id);
+    
+    public record PictureAddedToAClassifiedAd(Guid PictureId, Guid ClassifiedAdId, string Url, int Height, int Width);
 }

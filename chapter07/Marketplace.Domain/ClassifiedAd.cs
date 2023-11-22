@@ -3,18 +3,19 @@ using Marketplace.Framework;
 
 namespace Marketplace.Domain;
 
-public class ClassifiedAd : Entity
+public class ClassifiedAd : Entity<ClassifiedAdId>
 {
-    public ClassifiedAdId Id { get; private set; }
+    //public ClassifiedAdId Id { get; private set; }
     public UserId OwnerId { get; private set; }
     public ClassifiedAdTitle? Title { get; private set; }
     public ClassifiedAdText? Text { get; private set; }
     public Price? Price { get; private set; }
     public ClassifiedAdState State { get; private set; }
     public UserId? ApprovedBy { get; private set; }
+    public List<Picture> Pictures { get; private set; } = new ();
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    public ClassifiedAd(ClassifiedAdId id, UserId ownerId)
+    public ClassifiedAd(ClassifiedAdId id, UserId ownerId) : base(id)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
         Apply(new Events.ClassifiedAdCreated(Id: id, OwnerId: ownerId));
@@ -40,6 +41,17 @@ public class ClassifiedAd : Entity
         Apply(new Events.ClassifiedAdSentForReview(Id: Id));
     }
 
+    public void AddPicture(Uri pictureUri, PictureSize size)
+    {
+        Apply(new Events.PictureAddedToAClassifiedAd(
+            PictureId: Guid.NewGuid(),
+            ClassifiedAdId: Id,
+            Url: pictureUri.ToString(),
+            Height: size.Height,
+            Width: size.Width
+        ));
+    }
+
     protected override void When(object @event)
     {
         switch (@event)
@@ -60,6 +72,13 @@ public class ClassifiedAd : Entity
                 break;
             case Events.ClassifiedAdSentForReview:
                 State = ClassifiedAdState.PendingReview;
+                break;
+            case Events.PictureAddedToAClassifiedAd e:
+                Pictures.Add(new Picture(
+                    new PictureId(e.PictureId),
+                    new Uri(e.Url),
+                    new PictureSize(e.Height, e.Width),
+                    Pictures.Max(x => x.Order) + 1));
                 break;
         }
     }

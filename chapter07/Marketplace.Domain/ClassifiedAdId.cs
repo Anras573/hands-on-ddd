@@ -1,6 +1,8 @@
-﻿namespace Marketplace.Domain;
+﻿using Marketplace.Framework;
 
-public record ClassifiedAdId
+namespace Marketplace.Domain;
+
+public record ClassifiedAdId : RecordIdentifier
 {
     public Guid Value { get; }
 
